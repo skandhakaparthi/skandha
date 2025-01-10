@@ -1,0 +1,537 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int n = nums.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (nums[i] + nums[j] == target) {
+                    return {i, j};
+                }
+            }
+        }
+        return {}; // No solution found
+    }
+};
+lass Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummyHead = new ListNode(0);
+        ListNode* tail = dummyHead;
+        int carry = 0;
+
+        while (l1 != nullptr || l2 != nullptr || carry != 0) {
+            int digit1 = (l1 != nullptr) ? l1->val : 0;
+            int digit2 = (l2 != nullptr) ? l2->val : 0;
+
+            int sum = digit1 + digit2 + carry;
+            int digit = sum % 10;
+            carry = sum / 10;
+
+            ListNode* newNode = new ListNode(digit);
+            tail->next = newNode;
+            tail = tail->next;
+
+            l1 = (l1 != nullptr) ? l1->next : nullptr;
+            l2 = (l2 != nullptr) ? l2->next : nullptr;
+        }
+
+        ListNode* result = dummyHead->next;
+        delete dummyHead;
+        return result;
+    }
+};
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int n = s.length();
+        int maxLength = 0;
+        unordered_set<char> charSet;
+        int left = 0;
+        
+        for (int right = 0; right < n; right++) {
+            if (charSet.count(s[right]) == 0) {
+                charSet.insert(s[right]);
+                maxLength = max(maxLength, right - left + 1);
+            } else {
+                while (charSet.count(s[right])) {
+                    charSet.erase(s[left]);
+                    left++;
+                }
+                charSet.insert(s[right]);
+            }
+        }
+        
+        return maxLength;
+    }
+};
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2) {
+        int n1 = nums1.size(), n2 = nums2.size();
+        
+        // Ensure nums1 is the smaller array for simplicity
+        if (n1 > n2)
+            return findMedianSortedArrays(nums2, nums1);
+        
+        int n = n1 + n2;
+        int left = (n1 + n2 + 1) / 2; // Calculate the left partition size
+        int low = 0, high = n1;
+        
+        while (low <= high) {
+            int mid1 = (low + high) >> 1; // Calculate mid index for nums1
+            int mid2 = left - mid1; // Calculate mid index for nums2
+            
+            int l1 = INT_MIN, l2 = INT_MIN, r1 = INT_MAX, r2 = INT_MAX;
+            
+            // Determine values of l1, l2, r1, and r2
+            if (mid1 < n1)
+                r1 = nums1[mid1];
+            if (mid2 < n2)
+                r2 = nums2[mid2];
+            if (mid1 - 1 >= 0)
+                l1 = nums1[mid1 - 1];
+            if (mid2 - 1 >= 0)
+                l2 = nums2[mid2 - 1];
+            
+            if (l1 <= r2 && l2 <= r1) {
+                // The partition is correct, we found the median
+                if (n % 2 == 1)
+                    return max(l1, l2);
+                else
+                    return ((double)(max(l1, l2) + min(r1, r2))) / 2.0;
+            }
+            else if (l1 > r2) {
+                // Move towards the left side of nums1
+                high = mid1 - 1;
+            }
+            else {
+                // Move towards the right side of nums1
+                low = mid1 + 1;
+            }
+        }
+        
+        return 0; // If the code reaches here, the input arrays were not sorted.
+    }
+};
+class Solution {
+private: 
+    bool check(string &s, int i, int j){
+        while(i<j){
+            if(s[i] != s[j]){
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }            
+public:
+    string longestPalindrome(string s) {
+        int n = s.size();
+        int starting_index = 0;
+        int max_len = 0;
+        for(int i=0; i<n; i++){
+            for(int j=i; j<n; j++){
+                if(check(s, i, j)){
+                    if(j-i+1 > max_len){
+                        max_len = j-i+1;
+                        starting_index = i;
+                    }
+                }
+            }
+        }
+        return s.substr(starting_index, max_len);
+    }
+}; 
+class Solution {
+    public:String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        
+        StringBuilder answer = new StringBuilder();
+        int n = s.length();
+        int diff = 2 * (numRows - 1);
+        int diagonalDiff = diff;
+        int secondIndex;
+        int index;
+        for (int i = 0; i < numRows; i++) {
+            index = i;
+
+            while (index < n) {
+                answer.append(s.charAt(index));
+                if (i != 0 && i != numRows - 1) {
+                    diagonalDiff = diff-2*i;
+                    secondIndex = index + diagonalDiff;
+                    
+                    if (secondIndex < n) {
+                        answer.append(s.charAt(secondIndex));
+                    }
+                }
+                index += diff;
+            }
+        }
+        
+        return answer.toString();
+    }
+}
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        
+        stringstream answer;
+        int n = s.length();
+        int diff = 2 * (numRows - 1);
+        int diagonalDiff = diff;
+        int secondIndex;
+        int index;
+        for (int i = 0; i < numRows; i++) {
+            index = i;
+
+            while (index < n) {
+                answer << s[index];
+                if (i != 0 && i != numRows - 1) {
+                    diagonalDiff = diff-2*i;
+                    secondIndex = index + diagonalDiff;
+                    
+                    if (secondIndex < n) {
+                        answer << s[secondIndex];
+                    }
+                }
+                index += diff;
+            }
+        }
+        
+        return answer.str();
+    }
+};
+class Solution {
+    public:String convert(String s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        
+        StringBuilder answer = new StringBuilder();
+        int n = s.length();
+        int diff = 2 * (numRows - 1);
+        int diagonalDiff = diff;
+        int secondIndex;
+        int index;
+        for (int i = 0; i < numRows; i++) {
+            index = i;
+
+            while (index < n) {
+                answer.append(s.charAt(index));
+                if (i != 0 && i != numRows - 1) {
+                    diagonalDiff = diff-2*i;
+                    secondIndex = index + diagonalDiff;
+                    
+                    if (secondIndex < n) {
+                        answer.append(s.charAt(secondIndex));
+                    }
+                }
+                index += diff;
+            }
+        }
+        
+        return answer.toString();
+    }
+}
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if (numRows == 1) {
+            return s;
+        }
+        
+        stringstream answer;
+        int n = s.length();
+        int diff = 2 * (numRows - 1);
+        int diagonalDiff = diff;
+        int secondIndex;
+        int index;
+        for (int i = 0; i < numRows; i++) {
+            index = i;
+
+            while (index < n) {
+                answer << s[index];
+                if (i != 0 && i != numRows - 1) {
+                    diagonalDiff = diff-2*i;
+                    secondIndex = index + diagonalDiff;
+                    
+                    if (secondIndex < n) {
+                        answer << s[secondIndex];
+                    }
+                }
+                index += diff;
+            }
+        }
+        v
+        return answer.str();
+    }
+};
+class Solution {
+public:
+    int reverse(int x)
+    {
+        int reversed = 0;
+        while( x != 0 )
+        {
+            int digit = x % 10;
+            x = x / 10;
+
+            if(( reversed > INT_MAX / 10) || ( reversed == INT_MAX / 10 && digit > 7))
+                return 0; // overflow(positive)
+            else if(( reversed < INT_MIN / 10) || ( reversed == INT_MIN/10 && digit < -8))
+                return 0; // overflow(negative)
+
+            reversed = reversed * 10 + digit;
+        }
+        return reversed;
+    }
+}
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if (x < 0) {
+            return false;
+        }
+
+        long long reversed = 0;
+        long long temp = x;
+
+        while (temp != 0) {
+            int digit = temp % 10;
+            reversed = reversed * 10 + digit;
+            temp /= 10;
+        }
+
+        return (reversed == x);
+    }
+};
+class Solution {
+    vector<vector<int>> dp;
+    bool helper(string& s, string& p, int s_idx, int p_idx){
+        int sn = s.size();
+        int pn = p.size();
+
+        if(p_idx == pn){
+            if(s_idx == sn){
+                return true;
+            }
+            return false;
+        }
+
+
+        if(dp[s_idx][p_idx] != -1){
+            return dp[s_idx][p_idx];
+        }
+
+
+        bool ans = false;
+        bool curr = (s_idx < sn) and (s[s_idx] == p[p_idx] or p[p_idx] == '.');
+
+        if(p_idx + 1 < pn and p[p_idx + 1] == '*'){
+            ans = ans or helper(s, p, s_idx, p_idx+2);
+            ans = ans or (curr and helper(s, p, s_idx+1, p_idx));
+        }
+        else if(curr){
+             ans = ans or helper(s, p, s_idx+1, p_idx+1);
+        }
+
+        return dp[s_idx][p_idx] = ans;
+    }
+public:
+    bool isMatch(string s, string p) {
+        dp.resize(s.size()+1, vector<int>(p.size()+1, -1));
+        return helper(s, p, 0, 0);
+    }
+};
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int left = 0;
+        int right = height.size() - 1;
+        int maxArea = 0;
+
+        while (left < right) {
+            int currentArea = min(height[left], height[right]) * (right - left);
+            maxArea = max(maxArea, currentArea);
+
+            if (height[left] < height[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return maxArea;
+    }
+};
+class Solution {
+public:
+    string intToRoman(int num) {
+        string ones[] = {"","I","II","III","IV","V","VI","VII","VIII","IX"};
+        string tens[] = {"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC"};
+        string hrns[] = {"","C","CC","CCC","CD","D","DC","DCC","DCCC","CM"};
+        string ths[]={"","M","MM","MMM"};
+        
+        return ths[num/1000] + hrns[(num%1000)/100] + tens[(num%100)/10] + ones[num%10];
+    }
+};
+class Solution {
+public:
+    int romanToInt(string s) {
+        int ans=0;
+        unordered_map <char,int> mp{
+        {'I',1},{'V',5},{'X',10},{'L',50},{'C',100},{'D',500},{'M',1000}};
+
+    for(int i=0;i<s.size();i++){
+        if(mp[s[i]]<mp[s[i+1]]){
+            //for cases such as IV,CM, XL, etc...
+            ans=ans-mp[s[i]];
+        }
+        else{
+            ans=ans+mp[s[i]];
+        }
+    }
+        return ans;
+    }
+};
+
+class Solution {
+public:
+    string longestCommonPrefix(vector<string>& strs) {
+        string ans_str{};
+        int i{0}, n = strs.size();
+        sort(strs.begin(),strs.end());
+        while(i<strs[0].size() && i<strs[n-1].size()){
+            if(strs[0][i]!=strs[n-1][i])
+                return ans_str;
+            ans_str+=strs[0][i];
+            i++;
+        }
+    return ans_str;
+    }
+};
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin() , nums.end());    //Sorted Array
+        if(nums.size() < 3){    //Base case 1
+            return {};
+        }
+        if(nums[0] > 0){        //Base case 2
+            return {};
+        }
+        vector<vector<int>> answer;
+        for(int i = 0 ; i < nums.size() ; ++i){     //Traversing the array to fix the number.
+            if(nums[i] > 0){     //If number fixed is +ve, stop there because we can't make it zero by searching after it.
+                break;
+            }
+            if(i > 0 && nums[i] == nums[i - 1]){    //If number is getting repeated, ignore the lower loop and continue.
+                continue;
+            }
+            int low = i + 1 , high = nums.size() - 1;   //Make two pointers high and low, and initialize sum as 0.
+            int sum = 0;
+            while(low < high){                          //Search between two pointers, just similiar to binary search.
+                sum = nums[i] + nums[low] + nums[high];
+                if(sum > 0){   //If sum is +ve, means, we need more -ve numbers to make it 0, decreament high (high--).
+                    high--;
+                } else if(sum < 0){ //If sum is -ve, means, we need more +ve numbers to make it 0, increament low (low++).
+                    low++;
+                } else {
+                    answer.push_back({nums[i] , nums[low] , nums[high]});  //we have found the required triplet, push it in answer vector
+                    int last_low_occurence = nums[low] , last_high_occurence = nums[high];  //Now again, to avoid duplicate triplets, we have to navigate to last occurences of num[low] and num[high] respectively
+                    while(low < high && nums[low] == last_low_occurence){   // Update the low and high with last occurences of low and high.
+                        low++;
+                    }
+                    while(low < high && nums[high] == last_high_occurence){
+                        high--;
+                    }
+                }
+            }
+        }
+        return answer;      //Return the answer vector.
+    }
+};
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int ans = INT_MAX;
+        int result = 0;
+        for (int i = 0; i < nums.size() - 2; i++) {
+            int j = i + 1;
+            int k = nums.size() - 1;
+            while (j < k) {
+                int sum = nums[i] + nums[j] + nums[k];
+                if (sum == target) {
+                    return sum;
+                } else if (abs(sum - target) < abs(ans)) {
+                    ans = sum - target;
+                    result = sum;
+                }
+                if (sum > target) {
+                    k--;
+                } else {
+                    j++;
+                }
+            }
+        }
+        return result;
+    }
+};
+lass Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout.tie(nullptr);
+        ListNode* node=new ListNode(0,head);
+        ListNode* temp=node;
+        for(int i=0;i<n;i++)
+        {
+            head=head->next;
+        }
+        while(head!=nullptr)
+        {
+            head=head->next;
+            temp=temp->next;
+        }
+        temp->next=temp->next->next;
+
+        return node->next;
+    }
+};
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ios_base::sync_with_stdio(false);
+        cin.tie(nullptr);
+        cout.tie(nullptr);
+        ListNode* node=new ListNode(0,head);
+        ListNode* temp=node;
+        for(int i=0;i<n;i++)
+        {
+            head=head->next;
+        }
+        while(head!=nullptr)
+        {
+            head=head->next;
+            temp=temp->next;
+        }
+        temp->next=temp->next->next;
+
+        return node->next;
+    }
+};
+
+
+
+
+
